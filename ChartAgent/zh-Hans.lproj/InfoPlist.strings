@@ -1,0 +1,2 @@
+"NSCameraUsageDescription" = "ChartAgent 会使用相机拍摄图表图像以进行分析。";
+"NSUserTrackingUsageDescription" = "ChartAgent 使用跟踪权限来衡量哪些营销活动带来了应用安装和订阅。";

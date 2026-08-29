@@ -1,0 +1,2 @@
+"NSCameraUsageDescription" = "チャート画像を撮影して分析するためにカメラを使用します。";
+"NSUserTrackingUsageDescription" = "ChartAgentは、アプリのインストールやサブスクリプションにつながったマーケティングキャンペーンを測定するために、トラッキング許可を使用します。";

@@ -1,0 +1,2 @@
+"NSCameraUsageDescription" = "ChartAgent utilise l’appareil photo pour prendre des images de graphiques à analyser.";
+"NSUserTrackingUsageDescription" = "ChartAgent utilise l’autorisation de suivi pour mesurer les campagnes marketing qui génèrent des installations de l’app et des abonnements.";

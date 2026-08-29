@@ -1,0 +1,13 @@
+.DS_Store
+.codegraph
+.omo/
+.pytest_cache/
+__pycache__/
+*.py[cod]
+backend/.env
+backend/.venv/
+DerivedData/
+build/
+tmp/
+xcuserdata/
+ChartAgent/Config/Secrets.xcconfig

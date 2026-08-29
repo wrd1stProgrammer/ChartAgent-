@@ -1,0 +1,41 @@
+{
+  "pins" : [
+    {
+      "identity" : "airbridge-ios-sdk-deployment",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ab180/airbridge-ios-sdk-deployment",
+      "state" : {
+        "revision" : "c26c5cf04ced861ffedeaba82e643f8e75f32619",
+        "version" : "4.11.0"
+      }
+    },
+    {
+      "identity" : "facebook-ios-sdk",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/facebook/facebook-ios-sdk.git",
+      "state" : {
+        "revision" : "80d0ee82f6370d1bace1431a80cb80575f98ee90",
+        "version" : "18.1.1"
+      }
+    },
+    {
+      "identity" : "purchases-ios-spm",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/RevenueCat/purchases-ios-spm.git",
+      "state" : {
+        "revision" : "5d24ed423830598cf28e3f69d9392464c4c023c5",
+        "version" : "5.83.2"
+      }
+    },
+    {
+      "identity" : "tiktok-business-ios-sdk",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/tiktok/tiktok-business-ios-sdk.git",
+      "state" : {
+        "revision" : "2a3a35560c2c0547f74869c58160946e29c0932c",
+        "version" : "1.7.2"
+      }
+    }
+  ],
+  "version" : 2
+}

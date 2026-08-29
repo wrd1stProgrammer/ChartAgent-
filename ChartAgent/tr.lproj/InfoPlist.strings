@@ -1,0 +1,2 @@
+"NSCameraUsageDescription" = "ChartAgent, analiz için grafik görüntüleri çekmek üzere kamerayı kullanır.";
+"NSUserTrackingUsageDescription" = "ChartAgent, hangi pazarlama kampanyalarının uygulama yüklemelerine ve aboneliklere yol açtığını ölçmek için izleme iznini kullanır.";
