@@ -251,3 +251,5 @@ The app chrome stays quiet and native. Pixel rooms carry the character: warm wal
 - All UI copy, including onboarding, analysis states, results, paywall, settings, errors, and relative dates, comes from `Localizable.xcstrings` under the selected app locale.
 - Agent analysis and follow-up requests send the exact selected locale to the server. The server must answer entirely in that language while preserving the one-word market stance vocabulary.
 - Brand names (`ChartAgent`, `ChartAgent PRO`) and market symbols are never translated. Entry, stop, target, stance, and trading terminology use reviewed financial-domain copy instead of generic commerce translations.
+
+작도 캡션은 차트 안에서 기본 9pt, 확대 화면에서 10.5pt를 사용하며 터치 영역은 44pt를 유지한다. 실제 스윙 접점을 잇는 추세선은 실선으로, 같은 기울기를 현재 캔들까지 연장한 부분은 점선으로 구분한다. 연장선도 캡션 충돌 회피 대상에 포함한다. 분석 응답을 받으면 작도를 미리 시작하고 회의 재생과 겹쳐 실행하며, 결과 화면은 진행 중인 같은 요청을 공유한다.

@@ -54,3 +54,20 @@ def test_report_link_rejects_a_scenario_not_in_the_report() -> None:
     # When the generated link is checked against the actual report, reject it.
     with pytest.raises(AnalysisUnavailableError):
         plan.validate_scenario_links(scenario_count=2)
+
+
+def test_trendline_extension_preserves_real_pivots() -> None:
+    mark = ChartAnnotation(id="a1", kind="line", title="상승 추세선", detail="두 저점을 연결합니다.",
+                           outlook="연장선 위에서 지지하면 반등이 유지됩니다.", tone="mint",
+                           points=[ImagePoint(x=0.2, y=0.7), ImagePoint(x=0.5, y=0.5)],
+                           label_anchor=ImagePoint(x=0.3, y=0.8), extend_to_x=0.8)
+    assert mark.points[-1] == ImagePoint(x=0.5, y=0.5)
+    assert mark.extend_to_x == 0.8
+
+
+def test_trendline_rejects_extension_outside_the_image() -> None:
+    with pytest.raises(ValidationError):
+        ChartAnnotation(id="a1", kind="line", title="상승 추세선", detail="두 저점을 연결합니다.",
+                        outlook="연장선 위에서 지지하면 반등이 유지됩니다.", tone="mint",
+                        points=[ImagePoint(x=0.2, y=0.7), ImagePoint(x=0.5, y=0.2)],
+                        label_anchor=ImagePoint(x=0.3, y=0.8), extend_to_x=0.9)

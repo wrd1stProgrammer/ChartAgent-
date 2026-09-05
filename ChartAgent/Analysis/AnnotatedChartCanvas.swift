@@ -5,8 +5,10 @@ enum ChartAnnotationStyle {
     static let stroke: CGFloat = 1.25
     static let labelCorner: CGFloat = 3
 
+    static func labelFontSize(expanded: Bool) -> CGFloat { expanded ? 10.5 : 9 }
+
     static func labelSize(title: String, index: Int, expanded: Bool, availableWidth: CGFloat) -> CGSize {
-        let font = UIFont.systemFont(ofSize: expanded ? 12 : 10.5, weight: .semibold)
+        let font = UIFont.systemFont(ofSize: labelFontSize(expanded: expanded), weight: .semibold)
         let text = "\(index + 1) · \(title)" as NSString
         let width = text.size(withAttributes: [.font: font]).width + 6
         return CGSize(width: min(ceil(width), min(availableWidth - 12, expanded ? 170 : 132)),
@@ -59,7 +61,7 @@ struct AnnotatedChartCanvas: View {
                         let frame = labels[index]
                         Button { selectedID = item.id } label: {
                             Text(verbatim: "\(index + 1) · \(item.title)")
-                            .font(.system(size: expanded ? 12 : 10.5, weight: .semibold))
+                            .font(.system(size: ChartAnnotationStyle.labelFontSize(expanded: expanded), weight: .semibold))
                             .foregroundStyle(ChartAnnotationStyle.color(item.tone))
                             .lineLimit(1)
                             .minimumScaleFactor(0.85)
@@ -120,7 +122,15 @@ struct AnnotatedChartCanvas: View {
         context.stroke(path, with: .color(ChartTheme.background.opacity(0.35)), lineWidth: width + 1)
         context.stroke(path, with: .color(color), style: StrokeStyle(lineWidth: width, lineCap: .round,
                                                                  lineJoin: .round, dash: item.kind == .zone ? [4, 3] : []))
-        let target = item.kind == .zone ? CGPoint(x: (first.x + last.x) / 2, y: (first.y + last.y) / 2) : last
+        if let extensionPoints = item.trendExtension {
+            var extensionPath = Path()
+            extensionPath.move(to: extensionPoints[0].position(in: rect))
+            extensionPath.addLine(to: extensionPoints[1].position(in: rect))
+            context.stroke(extensionPath, with: .color(color.opacity(0.85)),
+                           style: StrokeStyle(lineWidth: width, lineCap: .round, dash: [4, 3]))
+        }
+        let target = item.kind == .zone ? CGPoint(x: (first.x + last.x) / 2, y: (first.y + last.y) / 2)
+            : item.trendExtension?.last?.position(in: rect) ?? last
         let edge = CGPoint(x: min(max(target.x, label.minX), label.maxX), y: min(max(target.y, label.minY), label.maxY))
         var leader = Path()
         leader.move(to: edge)

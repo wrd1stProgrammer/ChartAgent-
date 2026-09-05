@@ -154,11 +154,12 @@ struct ChartAnnotationCard: View {
         failed = false
         defer { isLoading = false }
         do {
-            let received = try await ChartAgentAPI.shared.chartAnnotations(imageData: imageData, analysis: analysis, locale: locale)
+            let received = try await analysisStore.prepareChartAnnotations(
+                analysisID: analysisID, imageData: imageData, analysis: analysis, locale: locale, retry: retry > 0
+            ).value
             try Task.checkCancellation()
             document = received
             selectedID = received.annotations.first?.id
-            try? analysisStore.saveChartAnnotations(received, key: requestKey)
         } catch {
             if !Task.isCancelled { failed = true }
         }

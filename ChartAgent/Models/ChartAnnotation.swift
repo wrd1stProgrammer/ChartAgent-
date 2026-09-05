@@ -27,6 +27,16 @@ struct ChartAnnotation: Codable, Equatable, Identifiable {
     let tone: Tone
     let points: [ChartImagePoint]
     let labelAnchor: ChartImagePoint
+    let extendToX: Double?
+
+    var trendExtension: [ChartImagePoint]? {
+        guard let extendToX, extendToX.isFinite, kind == .line, points.count == 2 else { return nil }
+        let start = points[0], end = points[1]
+        guard end.x - start.x >= 0.04, extendToX > end.x, extendToX <= 1 else { return nil }
+        let slope = (end.y - start.y) / (end.x - start.x)
+        let extended = ChartImagePoint(x: extendToX, y: end.y + slope * (extendToX - end.x))
+        return extended.isNormalized ? [end, extended] : nil
+    }
 
     var parallelBoundary: [ChartImagePoint]? {
         guard kind == .channel, points.count == 3 else { return nil }
@@ -56,13 +66,14 @@ struct ChartAnnotationDocument: Codable, Equatable {
                     && (item.kind == .line || (item.kind == .channel ? item.parallelBoundary != nil : item.points.count == 2))
                     && item.points.allSatisfy(\.isNormalized)
                     && item.labelAnchor.isNormalized
+                    && (item.extendToX == nil || item.trendExtension != nil)
                     && !item.title.isEmpty && item.title.count <= 24
                     && !item.outlook.isEmpty
             }
     }
 
     static func cacheKey(analysisID: String, locale: String) -> String {
-        analysisID + ":" + locale + ":api2:v3"
+        analysisID + ":" + locale + ":api2:v4"
     }
 
     func hasValidScenarioLinks(count: Int) -> Bool {
@@ -143,7 +154,7 @@ enum ChartAnnotationGeometry {
             if let boundary = item.parallelBoundary {
                 paths = [Array(points.prefix(2)), boundary.map { $0.position(in: rect) }]
             } else {
-                paths = [points]
+                paths = [points] + (item.trendExtension.map { [$0.map { $0.position(in: rect) }] } ?? [])
             }
             return paths.flatMap { path in zip(path, path.dropFirst()).flatMap { start, end in
                 let steps = max(1, Int(hypot(end.x - start.x, end.y - start.y) / 6))

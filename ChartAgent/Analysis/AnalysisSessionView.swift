@@ -462,6 +462,8 @@ struct AnalysisSessionView: View {
         }
         do {
             let response = try await runCoordinator.analyze(draft)
+            try Task.checkCancellation()
+            prefetchChartAnnotations(response)
             isAnalysisResponseReady = true
             await progress.value
             record = response
@@ -485,7 +487,16 @@ struct AnalysisSessionView: View {
         }
     }
 
+    private func prefetchChartAnnotations(_ record: AnalysisRecord) {
+        guard subscriptionStore.isEntitlementResolved, subscriptionStore.isProActive else { return }
+        analysisStore.prepareChartAnnotations(
+            analysisID: record.id, imageData: draft.imageData, analysis: record.result,
+            locale: AppLanguage.current.responseLanguage
+        )
+    }
+
     private func saveCompletedAnalysis(_ record: AnalysisRecord) {
+        prefetchChartAnnotations(record)
         analysisStore.save(record, imageData: draft.imageData)
         if !didTrackAnalysisCompleted {
             didTrackAnalysisCompleted = true
