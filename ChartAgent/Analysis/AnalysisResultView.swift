@@ -32,7 +32,6 @@ struct AnalysisResultView: View {
     @State private var expandedAgentID: String?
     @State private var questionDestination: AgentQuestionDestination?
     @State private var isNewsExpanded = false
-    @State private var imageViewer: ChartImageViewerDestination?
     @State private var isDeleteConfirmationPresented = false
 
     init(
@@ -50,9 +49,10 @@ struct AnalysisResultView: View {
     var body: some View {
         VStack(spacing: 0) {
             resultHeader
-            ScrollView(showsIndicators: false) {
+            ScrollViewReader { scroll in
+              ScrollView(showsIndicators: false) {
                 VStack(spacing: 16) {
-                    chartPreview
+                    chartPreview(scroll: scroll)
                     decisionCard
                     tradeSetupCard
                     scenarios
@@ -74,6 +74,7 @@ struct AnalysisResultView: View {
                 .padding(.bottom, 30)
                 .frame(maxWidth: 680)
                 .frame(maxWidth: .infinity)
+              }
             }
         }
         .background(ChartTheme.background.ignoresSafeArea())
@@ -96,9 +97,6 @@ struct AnalysisResultView: View {
                 .presentationDragIndicator(.visible)
                 .presentationCornerRadius(28)
                 .presentationBackground(ChartTheme.background)
-        }
-        .fullScreenCover(item: $imageViewer) { destination in
-            ChartImageViewer(image: destination.image)
         }
     }
 
@@ -142,51 +140,18 @@ struct AnalysisResultView: View {
     }
 
     @ViewBuilder
-    private var chartPreview: some View {
-        ZStack(alignment: .topTrailing) {
-            if let imageData, let image = UIImage(data: imageData) {
-                Image(uiImage: image)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 230)
-                    .background(Color.black)
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                        imageViewer = ChartImageViewerDestination(image: image)
-                    }
-            }
-            Label(
-                String.localizedStringWithFormat(
-                    AppLanguage.localized("%@명 검토 완료"),
-                    String(record.result.agentOpinions.count)
-                ),
-                systemImage: "checkmark.seal.fill"
+    private func chartPreview(scroll: ScrollViewProxy) -> some View {
+        if let imageData {
+            ChartAnnotationCard(
+                analysisID: record.id,
+                imageData: imageData,
+                analysis: record.result,
+                onScenarioSelected: { index in
+                    withAnimation { scroll.scrollTo("chart-scenario-\(index)", anchor: .top) }
+                },
+                isLocked: isContentLocked
             )
-                .font(.caption2.weight(.black))
-                .foregroundStyle(.black)
-                .padding(.horizontal, 9)
-                .padding(.vertical, 6)
-                .background(ChartTheme.mint, in: Capsule())
-                .padding(12)
-
-            if imageData.flatMap(UIImage.init(data:)) != nil {
-                Image(systemName: "arrow.up.left.and.arrow.down.right")
-                    .font(.caption.bold())
-                    .foregroundStyle(.white)
-                    .frame(width: 32, height: 32)
-                    .background(.black.opacity(0.72), in: Circle())
-                    .padding(12)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
-                    .allowsHitTesting(false)
-            }
         }
-        .frame(maxWidth: .infinity)
-        .frame(height: 230)
-        .background(ChartTheme.surface)
-        .clipShape(RoundedRectangle(cornerRadius: 22))
-        .overlay { RoundedRectangle(cornerRadius: 22).stroke(ChartTheme.stroke) }
-        .padding(.top, 10)
     }
 
     private var decisionCard: some View {
@@ -412,7 +377,7 @@ struct AnalysisResultView: View {
         VStack(alignment: .leading, spacing: 10) {
             sectionHeader("조건별 시나리오", detail: "이미지 근거가 바뀔 때의 대응", icon: "arrow.triangle.branch")
             VStack(spacing: 9) {
-                ForEach(record.result.scenarios) { item in
+                ForEach(Array(record.result.scenarios.enumerated()), id: \.element.id) { index, item in
                     HStack(alignment: .top, spacing: 12) {
                         Circle().fill(color(for: item.tone)).frame(width: 8, height: 8).padding(.top, 6)
                         VStack(alignment: .leading, spacing: 7) {
@@ -432,6 +397,7 @@ struct AnalysisResultView: View {
                     }
                     .padding(14)
                     .chartCard(fill: ChartTheme.surfaceRaised, radius: 14)
+                    .id("chart-scenario-\(index)")
                 }
             }
         }

@@ -1,5 +1,16 @@
 # ChartAgent Design Contract
 
+## 2026-09-05 Chart evidence annotations
+
+- The result's uploaded chart is the source of truth. Draw vector annotations over the unchanged image, never redraw candles or generate a replacement chart. The supplied IMG_1094.PNG is a reference for concise lines and callouts, not a screen to clone.
+- One combined view contains at most three image-grounded annotations, not five agent layers. A parallel channel uses two baseline points and one opposing swing; both boundaries share one computed slope and count as one annotation. Normalized image coordinates map through the same aspect-fit rectangle as the image, including in the zoom viewer.
+- Reuse ChartTheme surfaces, mint/support, coral/resistance, amber/caution and blue/structure. Annotation strokes are 1.25 pt with a subtle contrasting halo; zones use 10% fill. Labels are single-line inline captions, 10.5 pt semibold in the result and 12 pt expanded, with only 3 pt horizontal/2 pt vertical padding, a translucent backing and a 3 pt corner. No badge, outline or large box. Their width follows the requested-language text. Numbered labels avoid overlap and connect back to their evidence with a fine leader.
+- A compact header contains 핵심 작도, 원본/작도 and 확대, leaving the chart unobstructed. Below the selected drawing, show its visible evidence and a concise conditional outlook: what holding/breaking the boundary means for the next direction and what weakens that interpretation. Link to the matching report scenario using its validated index; keep these explanations below the image, never in large chart callout boxes. Readable text and buttons remain available to VoiceOver.
+- Annotation generation receives the actual consensus, scenarios, structure, trend evidence and available trade conditions. Prefer supported rising/falling trendlines relevant to the next decision; preserve valid parallel channels without drawing duplicate edges. Geometry comes from visible pivots, interpretation from the same analysis conditions. Conditional outlooks do not become invented future price-path arrows.
+- Loading, empty evidence, failed generation/retry, original, annotated, selected and expanded states preserve the original chart. The main report never waits for annotation generation. Locked reports do not request or reveal annotations.
+- Local sample charts and model output live in tmp/chart-annotations and are loaded only through a DEBUG screen. They never replace user analysis in production.
+
+
 ## 2026-08-16 Agent Studio Simplification
 
 - The Agent Studio tab is roster-first: it shows the header and the five cards in `내 분석팀` only. The separate animated Live Preview surface and explanatory footer card are removed.

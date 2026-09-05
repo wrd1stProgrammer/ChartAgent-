@@ -132,6 +132,27 @@ struct ChartAgentAPI {
         return try await waitForAnalysisJob(accepted.jobId, deadline: deadline)
     }
 
+    func chartAnnotations(imageData: Data, analysis: AnalysisPayload, locale: String) async throws -> ChartAnnotationDocument {
+        let boundary = "ChartAnnotation-\(UUID().uuidString)"
+        var request = URLRequest(url: baseURL.deletingLastPathComponent().appending(path: "v2/chart-annotations"))
+        request.httpMethod = "POST"
+        request.timeoutInterval = 130
+        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+        let context = try encoder.encode(ChartAnnotationContext(analysis: analysis))
+        var body = Data()
+        for (name, value) in [("locale", locale), ("report_context", String(decoding: context, as: UTF8.self))] {
+            body.append(Data("--\(boundary)\r\nContent-Disposition: form-data; name=\"\(name)\"\r\n\r\n\(value)\r\n".utf8))
+        }
+        body.append(Data("--\(boundary)\r\nContent-Disposition: form-data; name=\"image\"; filename=\"chart.jpg\"\r\nContent-Type: application/octet-stream\r\n\r\n".utf8))
+        body.append(imageData)
+        body.append(Data("\r\n--\(boundary)--\r\n".utf8))
+        request.httpBody = body
+        let document: ChartAnnotationDocument = try await send(request)
+        guard document.isValid, document.locale == locale,
+              document.hasValidScenarioLinks(count: analysis.scenarios.count) else { throw ChartAgentAPIError.invalidResponse }
+        return document
+    }
+
     func followUp(
         agentID: String,
         question: String,

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		01BC36FE8890D889649302DF /* AgentStudioView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB0EC3072632DA166BE5962F /* AgentStudioView.swift */; };
+		01DB1799C7F9787F888705A7 /* AnnotatedChartCanvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06D14C18F9BF6103AB3DFA8A /* AnnotatedChartCanvas.swift */; };
 		09EAB051D053487F78729485 /* ChartAgentAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3C2DC9232375C7BAEA149BD /* ChartAgentAPI.swift */; };
 		0B4775D62E46634DA0CD633B /* OnboardingFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D083EC590C5E379C9B4BCF9 /* OnboardingFlow.swift */; };
 		0D39707599F313108B0FB63B /* CandlestickChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 020C757BA7BE47491CA4FDEA /* CandlestickChart.swift */; };
@@ -22,17 +23,20 @@
 		3CBB911905FE0858A5B05BC7 /* AnalysisStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C2D661AD560986C3CC8AC4A /* AnalysisStore.swift */; };
 		41204A0CA427B889D3BC4B68 /* PixelOfficeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E021F78BF669D48A837D04 /* PixelOfficeView.swift */; };
 		419893D1ACDA15B78C060A8B /* RevenueCatConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009B0DB80A2C69AC2CA72BAF /* RevenueCatConfig.swift */; };
+		42E19DDDE446E0AF38C1BA23 /* ChartAnnotationCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47E5F64084A0C67238F9F098 /* ChartAnnotationCard.swift */; };
 		44E8C861CED35B19AE9FD6E4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 084EE777A1F87A0AECC973E9 /* Assets.xcassets */; };
 		488D60E008A71CF9B40064F0 /* Airbridge in Frameworks */ = {isa = PBXBuildFile; productRef = C31419A7D5C3F51962BE941F /* Airbridge */; };
 		4D6299B250D3A27868BB061C /* TikTokBusinessSDK in Frameworks */ = {isa = PBXBuildFile; productRef = AFCA70D748192C2F28A3C390 /* TikTokBusinessSDK */; };
 		516A71754BEA74E8DE36B4B5 /* BorderBeamKit in Frameworks */ = {isa = PBXBuildFile; productRef = 91D7A8028915A0F28A497A7A /* BorderBeamKit */; };
 		57440E158198F047E1FF0E9F /* PixelAgentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBD26C91EFC1A37AABA7E009 /* PixelAgentView.swift */; };
+		57F52DFDAC0F5561DAF9DB47 /* ChartAnnotationGeometryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB419E9E6ADDD1F9371447B6 /* ChartAnnotationGeometryTests.swift */; };
 		719483C52EC17C01D499D8C2 /* PixelAgent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68062EBA472C7297EF7995BB /* PixelAgent.swift */; };
 		74DF9CABF68CFEA00BED0802 /* AnalysisResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC3730816EBE1C042FEF225 /* AnalysisResultView.swift */; };
 		76F037482D6EE4DEE9439676 /* AgentProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28FEEB26843818AF5EFC3DAD /* AgentProfile.swift */; };
 		7BA11E7DA7394EB444FF235B /* SubscriptionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921A2551C89900D374657878 /* SubscriptionStore.swift */; };
 		7CE441CFA6BD2052FB50BA75 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 791FF046C2659FFB5FE6FA8A /* Localizable.xcstrings */; };
 		847FE586E64DB49DE1B8A8A9 /* AnalysisSessionLayoutTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8846D752B9C8063968F64F78 /* AnalysisSessionLayoutTests.swift */; };
+		8A7150DDEA531B7538355E58 /* ChartAnnotationPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = D865B397F823815B9E118A25 /* ChartAnnotationPreview.swift */; };
 		91A2261E94C6DADB5DA4E4AD /* AnalysisSessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C456B5F32689B8FF9B4D60 /* AnalysisSessionView.swift */; };
 		9213097723C925F5592191C2 /* ChartAgentApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4188C856C3D8C97017D510B /* ChartAgentApp.swift */; };
 		941F573FF668DC74C6C2E763 /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = 4F4179EC1D98CEC433DB2883 /* RevenueCat */; };
@@ -48,11 +52,13 @@
 		DD529092074A501FC1A20833 /* AppModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDA0532DA5EC636F0332EBC /* AppModels.swift */; };
 		E314DCB73CDF40E11DC765A3 /* ChartImageCropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 113E52CC49F90A5602DE3BE9 /* ChartImageCropView.swift */; };
 		EC7BDBDCEBA8D8DD85EA954D /* SubscriptionGatedResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27A8C20EBDFF55B2E75009C7 /* SubscriptionGatedResultView.swift */; };
+		F034CEB6672F43D599D8EC02 /* ChartAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E04C8ADE8F8DF83BA3DA7E48 /* ChartAnnotation.swift */; };
 		F27064947E1AD1D0D363DFC8 /* PaidAdsTrackingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29FAD2EEA289F9DABE8AC8F1 /* PaidAdsTrackingService.swift */; };
 		F6D836ECC15223E7C88B8D90 /* OnboardingFinalScreens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 718CCDF724E15CFC9BB5C741 /* OnboardingFinalScreens.swift */; };
 		F809B16AE72D4943C18CB95C /* LegalDocumentSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 974CC01D6720703776DCA9F3 /* LegalDocumentSheet.swift */; };
 		F8F858680144871B8016E860 /* AgentCustomizationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C7C3E4E7FF2521BAFD03FED /* AgentCustomizationTests.swift */; };
 		FB69BDFB12D116A55A8304F0 /* SecondaryScreens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 318EF9DE3E147FF3D5F94E8D /* SecondaryScreens.swift */; };
+		FF2927BC79EF1555A85D8D58 /* ChartAnnotationViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E96459AB151565AE74B57B29 /* ChartAnnotationViewer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +75,7 @@
 		009B0DB80A2C69AC2CA72BAF /* RevenueCatConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RevenueCatConfig.swift; sourceTree = "<group>"; };
 		020C757BA7BE47491CA4FDEA /* CandlestickChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandlestickChart.swift; sourceTree = "<group>"; };
 		05622894A47728F02225853C /* MarketLanguage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketLanguage.swift; sourceTree = "<group>"; };
+		06D14C18F9BF6103AB3DFA8A /* AnnotatedChartCanvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnotatedChartCanvas.swift; sourceTree = "<group>"; };
 		084EE777A1F87A0AECC973E9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0B5CBEFDEF7228DF0675846E /* PrivacyPolicy.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = PrivacyPolicy.md; sourceTree = "<group>"; };
 		113E52CC49F90A5602DE3BE9 /* ChartImageCropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartImageCropView.swift; sourceTree = "<group>"; };
@@ -86,6 +93,7 @@
 		40BC5AE029C9695FFE502842 /* ChartAgent.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = ChartAgent.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		43C456B5F32689B8FF9B4D60 /* AnalysisSessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalysisSessionView.swift; sourceTree = "<group>"; };
 		4467D577B0E838D1A83B2216 /* AnalysisUploadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalysisUploadView.swift; sourceTree = "<group>"; };
+		47E5F64084A0C67238F9F098 /* ChartAnnotationCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartAnnotationCard.swift; sourceTree = "<group>"; };
 		4944DD92B066BCEC4C83CFC8 /* ChartAgentTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = ChartAgentTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4EECEE5E8B57CBE84FDC4C14 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		56EFF754AE8735418F4B23E8 /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
@@ -120,7 +128,11 @@
 		C330B96ADC9B69F263C9A50D /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C3C2DC9232375C7BAEA149BD /* ChartAgentAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartAgentAPI.swift; sourceTree = "<group>"; };
 		C547FC2BC2C97F5719EEDC86 /* AppLanguageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLanguageTests.swift; sourceTree = "<group>"; };
+		D865B397F823815B9E118A25 /* ChartAnnotationPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartAnnotationPreview.swift; sourceTree = "<group>"; };
+		DB419E9E6ADDD1F9371447B6 /* ChartAnnotationGeometryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartAnnotationGeometryTests.swift; sourceTree = "<group>"; };
 		DE55D9847FB006EF7EB4E9D0 /* FollowUpChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowUpChatView.swift; sourceTree = "<group>"; };
+		E04C8ADE8F8DF83BA3DA7E48 /* ChartAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartAnnotation.swift; sourceTree = "<group>"; };
+		E96459AB151565AE74B57B29 /* ChartAnnotationViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartAnnotationViewer.swift; sourceTree = "<group>"; };
 		EDECBCDD1E5FE6538D4EB96D /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		F3396FC552D4ECF9AD96FD04 /* fr-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "fr-CA"; path = "fr-CA.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		FB0EC3072632DA166BE5962F /* AgentStudioView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgentStudioView.swift; sourceTree = "<group>"; };
@@ -150,6 +162,7 @@
 				28FEEB26843818AF5EFC3DAD /* AgentProfile.swift */,
 				2AF20E443C887BEC326770AD /* AnalysisModels.swift */,
 				2FDA0532DA5EC636F0332EBC /* AppModels.swift */,
+				E04C8ADE8F8DF83BA3DA7E48 /* ChartAnnotation.swift */,
 				68062EBA472C7297EF7995BB /* PixelAgent.swift */,
 			);
 			path = Models;
@@ -161,6 +174,7 @@
 				5C7C3E4E7FF2521BAFD03FED /* AgentCustomizationTests.swift */,
 				8846D752B9C8063968F64F78 /* AnalysisSessionLayoutTests.swift */,
 				C547FC2BC2C97F5719EEDC86 /* AppLanguageTests.swift */,
+				DB419E9E6ADDD1F9371447B6 /* ChartAnnotationGeometryTests.swift */,
 			);
 			path = ChartAgentTests;
 			sourceTree = "<group>";
@@ -249,6 +263,10 @@
 				FCC3730816EBE1C042FEF225 /* AnalysisResultView.swift */,
 				43C456B5F32689B8FF9B4D60 /* AnalysisSessionView.swift */,
 				4467D577B0E838D1A83B2216 /* AnalysisUploadView.swift */,
+				06D14C18F9BF6103AB3DFA8A /* AnnotatedChartCanvas.swift */,
+				47E5F64084A0C67238F9F098 /* ChartAnnotationCard.swift */,
+				D865B397F823815B9E118A25 /* ChartAnnotationPreview.swift */,
+				E96459AB151565AE74B57B29 /* ChartAnnotationViewer.swift */,
 				113E52CC49F90A5602DE3BE9 /* ChartImageCropView.swift */,
 				DE55D9847FB006EF7EB4E9D0 /* FollowUpChatView.swift */,
 				27A8C20EBDFF55B2E75009C7 /* SubscriptionGatedResultView.swift */,
@@ -441,11 +459,16 @@
 				91A2261E94C6DADB5DA4E4AD /* AnalysisSessionView.swift in Sources */,
 				3CBB911905FE0858A5B05BC7 /* AnalysisStore.swift in Sources */,
 				3816D443A073D5F0C3C58E78 /* AnalysisUploadView.swift in Sources */,
+				01DB1799C7F9787F888705A7 /* AnnotatedChartCanvas.swift in Sources */,
 				DD529092074A501FC1A20833 /* AppModels.swift in Sources */,
 				C91DCC0A17DBC6EFE9EB98FE /* AttributionService.swift in Sources */,
 				0D39707599F313108B0FB63B /* CandlestickChart.swift in Sources */,
 				09EAB051D053487F78729485 /* ChartAgentAPI.swift in Sources */,
 				9213097723C925F5592191C2 /* ChartAgentApp.swift in Sources */,
+				F034CEB6672F43D599D8EC02 /* ChartAnnotation.swift in Sources */,
+				42E19DDDE446E0AF38C1BA23 /* ChartAnnotationCard.swift in Sources */,
+				8A7150DDEA531B7538355E58 /* ChartAnnotationPreview.swift in Sources */,
+				FF2927BC79EF1555A85D8D58 /* ChartAnnotationViewer.swift in Sources */,
 				E314DCB73CDF40E11DC765A3 /* ChartImageCropView.swift in Sources */,
 				C7136A95471A467CD5704F0E /* ChartTheme.swift in Sources */,
 				BDEEC3ED861206CDCE9AE853 /* FollowUpChatView.swift in Sources */,
@@ -476,6 +499,7 @@
 				F8F858680144871B8016E860 /* AgentCustomizationTests.swift in Sources */,
 				847FE586E64DB49DE1B8A8A9 /* AnalysisSessionLayoutTests.swift in Sources */,
 				316B1669AE90230BFAF7C708 /* AppLanguageTests.swift in Sources */,
+				57F52DFDAC0F5561DAF9DB47 /* ChartAnnotationGeometryTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

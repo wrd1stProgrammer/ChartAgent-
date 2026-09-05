@@ -8,7 +8,7 @@ from pathlib import Path
 import signal
 import subprocess
 import tempfile
-from typing import TypeVar
+from typing import Literal, TypeVar
 
 import anyio
 from pydantic import BaseModel, ValidationError
@@ -31,9 +31,14 @@ class CodexCLIError(Exception):
 class CodexCLIProvider:
     error_type = CodexCLIError
 
-    def __init__(self, settings: Settings) -> None:
+    def __init__(self, settings: Settings, *, reasoning_effort: Literal["low", "medium"] | None = None,
+                 model: str | None = None, timeout_seconds: float | None = None,
+                 max_concurrency: int | None = None) -> None:
         self.settings = settings
-        self._limiter = anyio.CapacityLimiter(settings.codex_max_concurrency)
+        self.reasoning_effort = reasoning_effort or settings.codex_reasoning_effort
+        self.model = model or settings.codex_model
+        self.timeout_seconds = timeout_seconds if timeout_seconds is not None else settings.codex_timeout_seconds
+        self._limiter = anyio.CapacityLimiter(max_concurrency or settings.codex_max_concurrency)
 
     async def complete(
         self,
@@ -68,7 +73,7 @@ class CodexCLIProvider:
             try:
                 stdout, stderr = process.communicate(
                     input=_safe_prompt(prompt),
-                    timeout=self.settings.codex_timeout_seconds,
+                    timeout=self.timeout_seconds,
                 )
             except subprocess.TimeoutExpired as error:
                 _kill_process(process)
@@ -98,9 +103,9 @@ class CodexCLIProvider:
             "--color",
             "never",
             "--model",
-            self.settings.codex_model,
+            self.model,
             "-c",
-            f'model_reasoning_effort="{self.settings.codex_reasoning_effort}"',
+            f'model_reasoning_effort="{self.reasoning_effort}"',
             "--output-schema",
             str(schema),
             "-o",

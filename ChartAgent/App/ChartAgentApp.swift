@@ -69,6 +69,8 @@ struct ChartAgentApp: App {
             ?? arguments.first(where: { $0.hasPrefix("--chartagent-screen=") })?
                 .replacingOccurrences(of: "--chartagent-screen=", with: "")
         switch screen {
+        case "annotations":
+            ChartAnnotationPreview()
         case "onboarding":
             OnboardingFlow(onComplete: {})
         case "paywall":

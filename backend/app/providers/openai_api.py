@@ -3,7 +3,7 @@ from __future__ import annotations
 import base64
 import json
 from pathlib import Path
-from typing import TypeVar
+from typing import Literal, TypeVar
 
 from pydantic import BaseModel, ValidationError
 
@@ -16,8 +16,14 @@ ResponseModel = TypeVar("ResponseModel", bound=BaseModel)
 
 
 class OpenAIAPIProvider:
-    def __init__(self, settings: Settings) -> None:
+    def __init__(self, settings: Settings, *, reasoning_effort: Literal["low", "medium"] = "low",
+                 model: str | None = None, timeout_seconds: float | None = None,
+                 max_attempts: int | None = None) -> None:
         self.settings = settings
+        self.reasoning_effort = reasoning_effort
+        self.model = model or settings.openai_model
+        self.timeout_seconds = timeout_seconds
+        self.max_attempts = max_attempts
 
     async def complete(
         self,
@@ -42,11 +48,13 @@ class OpenAIAPIProvider:
                     "detail": "high",
                 }
             )
-        client = AsyncOpenAI(api_key=self.settings.openai_api_key)
+        client = (AsyncOpenAI(api_key=self.settings.openai_api_key, timeout=self.timeout_seconds,
+                              max_retries=self.max_attempts - 1)
+                  if self.max_attempts is not None else AsyncOpenAI(api_key=self.settings.openai_api_key))
         try:
             response = await client.responses.create(
-                model=self.settings.openai_model,
-                reasoning={"effort": "low"},
+                model=self.model,
+                reasoning={"effort": self.reasoning_effort},
                 max_output_tokens=2800,
                 input=[
                     {

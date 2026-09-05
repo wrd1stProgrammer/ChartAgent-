@@ -87,7 +87,7 @@ struct SubscriptionGatedResultView: View {
     }
 
     private var obscuredResult: some View {
-        AnalysisResultView(record: record, imageData: imageData, onClose: onClose)
+        AnalysisResultView(record: record, imageData: imageData, isContentLocked: true, onClose: onClose)
             .blur(radius: 11)
             .overlay(Color.black.opacity(0.22))
             .allowsHitTesting(false)

@@ -4,6 +4,7 @@ import Foundation
 final class AnalysisStore: ObservableObject {
     @Published private(set) var records: [AnalysisRecord] = []
     @Published private(set) var followUpThreads: [String: [SavedFollowUpTurn]] = [:]
+    @Published private(set) var chartAnnotations: [String: ChartAnnotationDocument] = [:]
 
     private let fileManager: FileManager
     private let rootURL: URL
@@ -25,6 +26,10 @@ final class AnalysisStore: ObservableObject {
         decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
         load()
+        if let data = try? Data(contentsOf: annotationsURL),
+           let saved = try? decoder.decode([String: ChartAnnotationDocument].self, from: data) {
+            chartAnnotations = saved.filter { $0.value.isValid }
+        }
     }
 
     var latest: AnalysisRecord? { records.first }
@@ -46,6 +51,14 @@ final class AnalysisStore: ObservableObject {
         try? Data(contentsOf: imageURL(for: record.id))
     }
 
+    func saveChartAnnotations(_ document: ChartAnnotationDocument, key: String) throws {
+        chartAnnotations[key] = document
+        try fileManager.createDirectory(at: rootURL, withIntermediateDirectories: true)
+        try encoder.encode(chartAnnotations).write(to: annotationsURL, options: .atomic)
+    }
+
+    private var annotationsURL: URL { rootURL.appending(path: "chart-annotations.json") }
+
     func followUpTurns(for analysisID: String) -> [SavedFollowUpTurn] {
         followUpThreads[analysisID, default: []].sorted { $0.createdAt < $1.createdAt }
     }
@@ -65,6 +78,8 @@ final class AnalysisStore: ObservableObject {
     func remove(_ record: AnalysisRecord) {
         records.removeAll { $0.id == record.id }
         followUpThreads.removeValue(forKey: record.id)
+        chartAnnotations = chartAnnotations.filter { !$0.key.hasPrefix(record.id + ":") }
+        try? encoder.encode(chartAnnotations).write(to: annotationsURL, options: .atomic)
         try? fileManager.removeItem(at: imageURL(for: record.id))
         try? persist()
         try? persistFollowUps()
@@ -73,6 +88,8 @@ final class AnalysisStore: ObservableObject {
     func removeAllAnalyses() {
         records.removeAll()
         followUpThreads.removeAll()
+        chartAnnotations.removeAll()
+        try? fileManager.removeItem(at: annotationsURL)
         do {
             if fileManager.fileExists(atPath: imagesURL.path()) {
                 try fileManager.removeItem(at: imagesURL)
