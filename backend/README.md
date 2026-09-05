@@ -39,7 +39,7 @@ curl --fail-with-body http://127.0.0.1:8010/v2/chart-annotations \
 
 작도 종류는 `line`, `zone`, `arrow`, `channel`입니다. 추세선은 실제 스윙 접점에 연결하고 평행 채널은 두 기준점과 반대 경계 한 점으로 같은 기울기의 두 선을 계산합니다. 각 작도의 `detail`은 관찰 근거, `outlook`은 유지·돌파·이탈에 따른 다음 방향, `scenario_index`는 연결된 기존 분석 시나리오의 0부터 시작하는 인덱스 또는 null입니다. 기존 분석과 충돌하는 방향이나 근거 없는 미래 가격 경로를 만들지 않습니다. 서버와 앱에서 좌표 및 시나리오 범위를 검증합니다.
 
-작도는 전용 provider 인스턴스와 실행 한도를 사용합니다. `CHARTAGENT_ANNOTATION_MODEL` 기본값은 `gpt-6-astra`이고 reasoning은 `medium`입니다. 운영 기본 `CHARTAGENT_ANNOTATION_PROVIDER=openai_api`는 작도 모델의 API를 직접 사용합니다. API 호출 100초(1회), 전체 요청 115초로 제한하며 `CHARTAGENT_ANNOTATION_MAX_CONCURRENCY` 기본값은 2입니다. 한도가 차면 대기열 없이 `503 annotations_busy`를 반환합니다. `CHARTAGENT_ANNOTATIONS_ENABLED=false`로 작도만 중지할 수 있습니다(설정 후 프로세스 재시작 필요). 로컬 QA에서 `CHARTAGENT_ANNOTATION_PROVIDER=codex_cli`를 지정하면 Codex 85초 이후 API 폴백을 사용하되 전체 115초를 넘기지 않습니다. 앱 저장소의 로컬 QA 기본값은 `codex_cli`입니다. 기존 v1 분석 한도와 설정은 변경하지 않습니다. 작도 실패 시 앱은 이미 받은 분석과 원본 차트를 유지하고 재시도를 제공합니다.
+작도는 전용 provider 인스턴스와 실행 한도를 사용합니다. `CHARTAGENT_ANNOTATION_MODEL` 기본값은 `gpt-5.6-luna`이며 Codex와 API 모두 reasoning `low`를 사용합니다. 기본 `CHARTAGENT_ANNOTATION_PROVIDER=codex_cli`는 Codex를 먼저 호출하고 실행·인증·타임아웃·스키마 오류 시 같은 모델과 reasoning의 OpenAI API로 폴백합니다. Codex 호출은 85초, API 호출은 최대 100초(1회), 전체 요청은 115초로 제한합니다. API 폴백에는 전체 요청의 남은 시간만 사용할 수 있습니다. `CHARTAGENT_ANNOTATION_PROVIDER=openai_api`를 지정하면 API를 바로 호출합니다. `CHARTAGENT_ANNOTATION_MAX_CONCURRENCY` 기본값은 2이며 한도가 차면 대기열 없이 `503 annotations_busy`를 반환합니다. `CHARTAGENT_ANNOTATIONS_ENABLED=false`로 작도만 중지할 수 있습니다(설정 후 프로세스 재시작 필요). 기존 v1 분석 한도와 설정은 변경하지 않습니다. 작도 실패 시 앱은 이미 받은 분석과 원본 차트를 유지하고 재시도를 제공합니다.
 
 ## 차트 이미지 위 핵심 작도
 
@@ -52,7 +52,7 @@ curl --fail-with-body http://127.0.0.1:8010/v2/chart-annotations \
   -F 'report_context=</absolute/path/annotation-context.json'
 ```
 
-작도는 이미지 좌표 정확도를 위해 기본 `gpt-6-astra` / `medium`을 사용합니다. `CHARTAGENT_ANNOTATION_MODEL`로 작도 모델만 설정할 수 있으며, 기존 분석/후속 질문의 `gpt-5.6-luna` / `low` 설정은 유지합니다. 평행 채널은 기준선의 두 점과 반대쪽 경계의 한 점을 받아 같은 기울기의 두 선으로 계산하며, 폭이 없거나 이미지 밖으로 나가는 채널은 거부합니다. 요청 언어는 지원하는 16개 locale로 제한하고 응답의 locale 및 로컬 캐시와 대조합니다. iOS는 보고서를 먼저 보여주고 작도를 별도로 불러오며, 분석 ID와 언어별로 로컬에 저장합니다. 원본 전환·번호 선택·전체 화면 확대는 같은 이미지 좌표를 공유합니다.
+작도는 기본 `gpt-5.6-luna` / `low`를 사용하며 Codex 실패 시 API도 같은 설정을 사용합니다. `CHARTAGENT_ANNOTATION_MODEL`로 작도 모델만 설정할 수 있으며, 기존 분석/후속 질문의 `gpt-5.6-luna` / `low` 설정은 유지합니다. 평행 채널은 기준선의 두 점과 반대쪽 경계의 한 점을 받아 같은 기울기의 두 선으로 계산하며, 폭이 없거나 이미지 밖으로 나가는 채널은 거부합니다. 요청 언어는 지원하는 16개 locale로 제한하고 응답의 locale 및 로컬 캐시와 대조합니다. iOS는 보고서를 먼저 보여주고 작도를 별도로 불러오며, 분석 ID와 언어별로 로컬에 저장합니다. 원본 전환·번호 선택·전체 화면 확대는 같은 이미지 좌표를 공유합니다.
 
 `report_context`는 `consensus`, 순서가 유지된 `scenarios`, `structure`, `trend_evidence`, 선택적 `trigger`·`invalidation`·`target`을 담는 JSON입니다. 앱은 실제 분석에서 이 문맥을 구성합니다. 각 작도의 `detail`은 관찰 근거, `outlook`은 유지·돌파·실패 조건에 따른 다음 방향, `scenario_index`는 연결된 분석 시나리오의 0부터 시작하는 인덱스 또는 null입니다. 서버와 앱이 실제 시나리오 범위를 검사합니다. 추세선은 실제 스윙 접점에만 그리며 미래 가격 경로를 만들어 그리지 않습니다. 앱에서는 작도 아래의 조건별 시나리오 버튼으로 해당 분석 항목에 이동합니다. 변경된 문맥을 반영하기 위해 작도 캐시는 API v2와 선 연장 규격 v4를 함께 구분합니다.
 
